@@ -14,7 +14,7 @@ myMaximum list
 average :: [Int] -> Float
 average list = addition list (length list)
 
-addition :: [Int] -> Int-> Float
+addition :: [Int] -> Int -> Float
 addition [] _ = 0
 addition list num = ((fromIntegral (head list))/(fromIntegral num)) + (addition (tail list) num)
 
@@ -24,13 +24,10 @@ buildPalindrome list = (reverse list) ++ list
 
 -- 5. Feu una funció remove :: [Int] -> [Int] -> [Int] que donada una llista d’enters x i una llista d’enters y, retorna la llista x havent eliminat totes les ocurrències dels elements en y.
 remove :: [Int] -> [Int] -> [Int]
-remove list toRemove = addOnly list toRemove []
-
-addOnly :: [Int] -> [Int] -> [Int] -> [Int]
-addOnly list toRemove newList
-    | list == [] = newList
-    | containsInt toRemove (head list) = addOnly (tail list) toRemove (newList)
-    | otherwise = addOnly (tail list) toRemove (newList ++ [(head list)])
+remove list toRemove
+    | list == [] = []
+    | containsInt toRemove (head list) = remove (tail list) toRemove
+    | otherwise = [(head list)] ++ remove (tail list) toRemove
 
 containsInt :: [Int] -> Int -> Bool
 containsInt [] _ = False
@@ -40,23 +37,18 @@ containsInt list num
 
 -- 6. Feu una funció flatten :: [[Int]] -> [Int] que aplana una llista de llistes produint una llista d’elements.
 flatten :: [[Int]] -> [Int]
-flatten listlist = addList listlist []
-
-addList :: [[Int]] -> [Int] -> [Int]
-addList [] newList = newList
-addList listlist newList = addList (tail listlist) (newList ++ (head listlist))
+flatten [] = []
+flatten listlist = (head listlist) ++ flatten (tail listlist)
 
 -- 7. Feu una funció oddsNevens :: [Int] -> ([Int],[Int]) que, donada una llista d’enters, retorni dues llistes, una que conté els parells i una que conté els senars, en el mateix ordre relatiu que a l’original.
 oddsNevens :: [Int] -> ([Int],[Int])
-oddsNevens list = divide list ([],[])
-
-divide :: [Int] -> ([Int],[Int]) -> ([Int],[Int])
-divide [] tuple = tuple
-divide list (odds, evens)
-    | mod x 2 == 0 = divide (tail list) (odds, (evens ++ [x]))
-    | otherwise = divide (tail list) ((odds ++ [x]), evens)
+oddsNevens [] = ([], [])
+oddsNevens list
+    | mod x 2 == 0 = (odds,[x] ++ evens)
+    | otherwise = ([x] ++ odds, evens)
     where
         x = (head list)
+        (odds, evens) = oddsNevens (tail list)
 
 -- 8. Feu una funció primeDivisors :: Int -> [Int] que retorni la llista de divisors primers d’un enter estrictament positiu.
 primeDivisors :: Int -> [Int]

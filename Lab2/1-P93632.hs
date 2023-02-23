@@ -7,6 +7,7 @@ eql a b
 -- 2. Feu una funció prod :: [Int] -> Int que calculi el producte dels elements d’una llista d’enters.
 prod :: [Int] -> Int
 prod list = foldl (*) 1 list
+
 -- 3. Feu una funció prodOfEvens :: [Int] -> Int que multiplica tots el nombres parells d’una llista d’enters.
 prodOfEvens :: [Int] -> Int
 prodOfEvens list = prod (filter even list)

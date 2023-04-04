@@ -1,13 +1,12 @@
 -- 1. Nombres romans (amb recursivitat)
 roman2int :: String -> Int
-roman2int roman = additionSub (map letterToInt roman) 0
+roman2int roman = additionSub (map letterToInt roman)
     where
-        additionSub :: [Int] -> Int -> Int
-        additionSub [] k = k
-        additionSub [x] k = x + k
-        additionSub (x:(y:z)) k
-            | x >= y = additionSub (y:z) (k + x)
-            | otherwise = additionSub (y:z) (k - x)
+        additionSub :: [Int] -> Int
+        additionSub [] = 0
+        additionSub (x:xs)
+            | xs == [] || x >= head xs = additionSub xs + x
+            | otherwise = additionSub xs - x
         
 
 letterToInt :: Char -> Int

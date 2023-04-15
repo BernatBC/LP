@@ -34,6 +34,7 @@ mapToElements func t val = map (\x -> operate func t x) val
             where
                 k = nthElement t n
 
+-- 4. Feu que STree sigui un functor.
 instance Functor (STree) where
     fmap f Nil = Nil
     fmap f (Node talla val t1 t2) = (Node talla (f val) (fmap f t1) (fmap f t2))

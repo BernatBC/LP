@@ -15,3 +15,6 @@ main = do
 
 calcIbm:: String -> String -> Float
 calcIbm weight height = w/(h*h)
+    where
+        w = read weight :: Float
+        h = read height :: Float

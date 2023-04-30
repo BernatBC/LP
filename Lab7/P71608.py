@@ -17,7 +17,6 @@ class Tree:
 
 class Pre(Tree):
     def preorder(self):
-        if self.num_children == 0: return [self.root()]
         L = [self.root()]
         for k in self.child:
             L += k.preorder()

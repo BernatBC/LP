@@ -14,6 +14,11 @@ class exprsVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by exprsParser#block.
+    def visitBlock(self, ctx:exprsParser.BlockContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by exprsParser#escriptura.
     def visitEscriptura(self, ctx:exprsParser.EscripturaContext):
         return self.visitChildren(ctx)
@@ -21,6 +26,21 @@ class exprsVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by exprsParser#assignacio.
     def visitAssignacio(self, ctx:exprsParser.AssignacioContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#condicio.
+    def visitCondicio(self, ctx:exprsParser.CondicioContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#bucle_while.
+    def visitBucle_while(self, ctx:exprsParser.Bucle_whileContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#parentesis.
+    def visitParentesis(self, ctx:exprsParser.ParentesisContext):
         return self.visitChildren(ctx)
 
 
@@ -46,6 +66,26 @@ class exprsVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by exprsParser#variable.
     def visitVariable(self, ctx:exprsParser.VariableContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#or_bool.
+    def visitOr_bool(self, ctx:exprsParser.Or_boolContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#parentesis_bool.
+    def visitParentesis_bool(self, ctx:exprsParser.Parentesis_boolContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#oper_bool.
+    def visitOper_bool(self, ctx:exprsParser.Oper_boolContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#and_bool.
+    def visitAnd_bool(self, ctx:exprsParser.And_boolContext):
         return self.visitChildren(ctx)
 
 

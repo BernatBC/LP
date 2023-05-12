@@ -40,6 +40,9 @@ class TreeVisitor(exprsVisitor):
 class EvalVisitor(exprsVisitor):
 
     def visitRoot(self, ctx):
+        return self.visitChildren(ctx)
+    
+    def visitBlock(self, ctx):
         l = list(ctx.getChildren())
         for f in l:
             self.visit(f)
@@ -55,7 +58,7 @@ class EvalVisitor(exprsVisitor):
         else: return self.visit(expressio1) / self.visit(expressio2)
 
     def visitPotencia(self, ctx):
-        [expressio1, operador, expressio2] = list(ctx.getChildren())
+        [expressio1, _, expressio2] = list(ctx.getChildren())
         return pow(self.visit(expressio1), self.visit(expressio2))
     
     def visitNumero(self, ctx):
@@ -63,17 +66,53 @@ class EvalVisitor(exprsVisitor):
         return int(numero.getText())
     
     def visitEscriptura(self, ctx):
-        [operador, expressio] = list(ctx.getChildren())
+        [_, expressio] = list(ctx.getChildren())
         print(self.visit(expressio))
 
     def visitAssignacio(self, ctx):
-        [variable, operador, expressio] = list(ctx.getChildren())
+        [variable, _, expressio] = list(ctx.getChildren())
         vars_dict[str(variable)] = self.visit(expressio)
         return
     
     def visitVariable(self, ctx):
         [variable] = list(ctx.getChildren())
         return vars_dict[str(variable)]
+    
+    def visitCondicio(self, ctx):
+        [_, expr_bool, _, bloc, _] = list(ctx.getChildren())
+        if self.visit(expr_bool):
+            self.visit(bloc)
+
+    def visitBucle_while(self, ctx):
+        [_, expr_bool, _, bloc, _] = list(ctx.getChildren())
+        while self.visit(expr_bool):
+            self.visit(bloc)
+
+    def visitParentesis(self, ctx):
+        [_, expressio, _] = list(ctx.getChildren())
+        return self.visit(expressio)
+    
+    def visitOr_bool(self, ctx):
+        [_, boolean1, _, boolean2, _] = list(ctx.getChildren())
+        return self.visit(boolean1) or self.visit(boolean2)
+
+    def visitParentesis_bool(self, ctx):
+        [_, expressio, _] = list(ctx.getChildren())
+        return self.visit(expressio)
+
+    def visitOper_bool(self, ctx):
+        [expressio1, operador, expressio2] = list(ctx.getChildren())
+        val1 = self.visit(expressio1)
+        val2 = self.visit(expressio2)
+        op = str(operador)
+        if op == '=': return val1 == val2
+        if op == '<': return val1 < val2
+        if op == '>': return val1 > val2
+        if op == '<>': return val1 != val2
+
+    def visitAnd_bool(self, ctx):
+        [_, boolean1, _, boolean2, _] = list(ctx.getChildren())
+        return self.visit(boolean1) and self.visit(boolean2)
 
 
 input_stream = StdinStream()

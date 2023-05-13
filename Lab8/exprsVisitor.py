@@ -14,8 +14,38 @@ class exprsVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by exprsParser#functions.
+    def visitFunctions(self, ctx:exprsParser.FunctionsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#function.
+    def visitFunction(self, ctx:exprsParser.FunctionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#main.
+    def visitMain(self, ctx:exprsParser.MainContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by exprsParser#block.
     def visitBlock(self, ctx:exprsParser.BlockContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#arguments.
+    def visitArguments(self, ctx:exprsParser.ArgumentsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#parameters.
+    def visitParameters(self, ctx:exprsParser.ParametersContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#retornar.
+    def visitRetornar(self, ctx:exprsParser.RetornarContext):
         return self.visitChildren(ctx)
 
 
@@ -66,6 +96,11 @@ class exprsVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by exprsParser#variable.
     def visitVariable(self, ctx:exprsParser.VariableContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#crida_funcio.
+    def visitCrida_funcio(self, ctx:exprsParser.Crida_funcioContext):
         return self.visitChildren(ctx)
 
 

@@ -3,7 +3,9 @@ from exprsLexer import exprsLexer
 from exprsParser import exprsParser
 from exprsVisitor import exprsVisitor
 
-vars_dict = dict()
+vars_dict = [dict()]
+func_dict = dict()
+args_dict = dict()
 
 class TreeVisitor(exprsVisitor):
     def __init__(self):
@@ -42,10 +44,23 @@ class EvalVisitor(exprsVisitor):
     def visitRoot(self, ctx):
         return self.visitChildren(ctx)
     
+    def visitMain(self, ctx):
+        return self.visitChildren(ctx)
+
+    def visitFunctions(self, ctx):
+        return self.visitChildren(ctx)
+
+    def visitFunction(self, ctx:exprsParser.FunctionContext):
+        [_, identifier, _, args, _, code_block, _] = list(ctx.getChildren())
+        func_dict[str(identifier)] = code_block
+        args_dict[str(identifier)] = self.visit(args)
+
     def visitBlock(self, ctx):
         l = list(ctx.getChildren())
         for f in l:
-            self.visit(f)
+            k = self.visit(f)
+            if isinstance(k, int):
+                return k
 
     def visitSuma_resta(self, ctx):
         [expressio1, operador, expressio2] = list(ctx.getChildren())
@@ -71,17 +86,17 @@ class EvalVisitor(exprsVisitor):
 
     def visitAssignacio(self, ctx):
         [variable, _, expressio] = list(ctx.getChildren())
-        vars_dict[str(variable)] = self.visit(expressio)
+        vars_dict[len(vars_dict) - 1][str(variable)] = self.visit(expressio)
         return
     
     def visitVariable(self, ctx):
         [variable] = list(ctx.getChildren())
-        return vars_dict[str(variable)]
+        return vars_dict[len(vars_dict) - 1][str(variable)]
     
     def visitCondicio(self, ctx):
         [_, expr_bool, _, bloc, _] = list(ctx.getChildren())
         if self.visit(expr_bool):
-            self.visit(bloc)
+            return self.visit(bloc)
 
     def visitBucle_while(self, ctx):
         [_, expr_bool, _, bloc, _] = list(ctx.getChildren())
@@ -113,7 +128,35 @@ class EvalVisitor(exprsVisitor):
     def visitAnd_bool(self, ctx):
         [_, boolean1, _, boolean2, _] = list(ctx.getChildren())
         return self.visit(boolean1) and self.visit(boolean2)
+    
+    def visitCrida_funcio(self, ctx):
+        [identifier, _, params, _] = list(ctx.getChildren())
+        v = self.visit(params)
+        new_vars_dict = dict()
+        for i in range(0,len(v)):
+            new_vars_dict[args_dict[str(identifier)][i]] = v[i]
+        vars_dict.append(new_vars_dict)
+        val = self.visit(func_dict[str(identifier)])
+        vars_dict.pop()
+        return val
 
+    def visitRetornar(self, ctx):
+        [_, expression] = list(ctx.getChildren())
+        return int(self.visit(expression))
+    
+    def visitArguments(self, ctx):
+        arguments = list(ctx.getChildren())
+        args = []
+        for a in arguments:
+            if str(a) != ',': args.append(str(a))
+        return args
+
+    def visitParameters(self, ctx):
+        parameters = list(ctx.getChildren())
+        params = []
+        for p in parameters:
+            if str(p) != ',': params.append(self.visit(p))
+        return params
 
 input_stream = StdinStream()
 lexer = exprsLexer(input_stream)
